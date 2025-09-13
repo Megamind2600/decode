@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,15 +27,14 @@ export function ReferralSection() {
   });
 
   // Set default share message from marketing config
-  useState(() => {
-    if (marketingConfig?.referralMessage) {
-      setShareMessage(marketingConfig.referralMessage.replace("{referralCode}", user?.referralCode || ""));
-    } else if (user?.referralCode) {
-      setShareMessage(
-        `Hey! I've been practicing interview questions on AI InterviewPrep and it's amazing! 🚀 The AI feedback is super detailed and helping me improve. You should try it out - use my referral code ${user.referralCode} to get 5 free bonus questions! 💪`
-      );
-    }
-  });
+  useEffect(() => {
+    if (!user) return;
+    
+    const msg = marketingConfig?.referralMessage?.replace("{referralCode}", user.referralCode || "") || 
+      `Hey! I've been practicing interview questions on AI InterviewPrep and it's amazing! 🚀 The AI feedback is super detailed and helping me improve. You should try it out - use my referral code ${user.referralCode} to get 5 free bonus questions! 💪`;
+    
+    setShareMessage(msg);
+  }, [marketingConfig, user?.referralCode]);
 
   const copyReferralCode = async () => {
     if (user?.referralCode) {
