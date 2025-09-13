@@ -32,6 +32,26 @@ export interface SubmitAnswerResponse {
   questionsRemaining: number;
 }
 
+export interface UserProgressResponse {
+  questionsCompleted: number;
+  questionsAvailable: number;
+  averageScore: number;
+  totalScore: number;
+}
+
+export interface ReferralStatsResponse {
+  totalReferrals: number;
+  questionsEarned: number;
+}
+
+export interface MarketingConfigResponse {
+  heroTitle?: string;
+  heroSubtitle?: string;
+  referralMessage?: string;
+  referralDescription?: string;
+  [key: string]: string | undefined;
+}
+
 export const authApi = {
   register: async (email: string, referralCode?: string): Promise<AuthResponse> => {
     const response = await apiRequest("POST", "/api/auth/register", { email, referralCode });
@@ -58,7 +78,7 @@ export const questionApi = {
 };
 
 export const userApi = {
-  getProgress: async (userId: string) => {
+  getProgress: async (userId: string): Promise<UserProgressResponse> => {
     const response = await apiRequest("GET", `/api/user/${userId}/progress`);
     return response.json();
   },
@@ -68,14 +88,14 @@ export const userApi = {
     return response.json();
   },
 
-  getReferrals: async (userId: string) => {
+  getReferrals: async (userId: string): Promise<ReferralStatsResponse> => {
     const response = await apiRequest("GET", `/api/user/${userId}/referrals`);
     return response.json();
   },
 };
 
 export const marketingApi = {
-  getConfig: async (abGroup: string) => {
+  getConfig: async (abGroup: string): Promise<MarketingConfigResponse> => {
     const response = await apiRequest("GET", `/api/marketing/${abGroup}`);
     return response.json();
   },

@@ -25,7 +25,30 @@ if (!connectionString) {
   throw new Error("DATABASE_URL environment variable is required");
 }
 
-const client = postgres(connectionString);
+// Handle special characters in password by parsing and reconstructing URL
+function parseAndFixDatabaseUrl(url: string): string {
+  try {
+    // Extract components manually to handle special characters in password
+    const regex = /^postgresql:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)$/;
+    const match = url.match(regex);
+    
+    if (match) {
+      const [, username, password, host, port, database] = match;
+      // URL encode the password to handle special characters like #
+      const encodedPassword = encodeURIComponent(password);
+      return `postgresql://${username}:${encodedPassword}@${host}:${port}/${database}`;
+    }
+    
+    // If regex doesn't match, try to use the URL as-is
+    return url;
+  } catch (error) {
+    console.error("Error parsing DATABASE_URL:", error);
+    return url;
+  }
+}
+
+const fixedConnectionString = parseAndFixDatabaseUrl(connectionString);
+const client = postgres(fixedConnectionString);
 const db = drizzle(client);
 
 export interface IStorage {

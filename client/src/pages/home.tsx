@@ -12,6 +12,7 @@ export default function Home() {
 
   const { data: marketingConfig } = useQuery({
     queryKey: ["/api/marketing", user?.abGroup || "A"],
+    queryFn: () => marketingApi.getConfig(user?.abGroup || "A"),
   });
 
   const heroTitle = marketingConfig?.heroTitle || "Master Your Next Interview";

@@ -16,11 +16,13 @@ export function ReferralSection() {
 
   const { data: referralStats } = useQuery({
     queryKey: ["/api/user", user?.id, "referrals"],
+    queryFn: () => userApi.getReferrals(user!.id),
     enabled: !!user?.id,
   });
 
   const { data: marketingConfig } = useQuery({
     queryKey: ["/api/marketing", user?.abGroup],
+    queryFn: () => marketingApi.getConfig(user!.abGroup),
     enabled: !!user?.abGroup,
   });
 

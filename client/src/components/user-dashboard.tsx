@@ -16,11 +16,13 @@ export function UserDashboard({ onGetMoreQuestions, onShareReferral }: UserDashb
 
   const { data: progress } = useQuery({
     queryKey: ["/api/user", user?.id, "progress"],
+    queryFn: () => userApi.getProgress(user!.id),
     enabled: !!user?.id,
   });
 
   const { data: referralStats } = useQuery({
     queryKey: ["/api/user", user?.id, "referrals"],
+    queryFn: () => userApi.getReferrals(user!.id),
     enabled: !!user?.id,
   });
 

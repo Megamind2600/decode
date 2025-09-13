@@ -2,7 +2,7 @@ import { useState } from "react";
 import { QuestionInterface } from "@/components/question-interface";
 import { AIFeedback } from "@/components/ai-feedback";
 import { useAuth } from "@/hooks/use-auth";
-import { Navigate } from "wouter";
+import { Redirect } from "wouter";
 
 type QuestionState = "answering" | "feedback";
 
@@ -12,7 +12,7 @@ export default function Question() {
   const { user } = useAuth();
 
   if (!user) {
-    return <Navigate to="/" />;
+    return <Redirect to="/" />;
   }
 
   const handleAnswerSubmitted = (evaluation: any) => {
