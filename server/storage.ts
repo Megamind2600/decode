@@ -19,6 +19,7 @@ import {
 } from "@shared/schema";
 import { eq, sql, and, desc } from "drizzle-orm";
 import { generateRandomCode, assignABGroup } from "./services/utils";
+import * as bcrypt from "bcrypt";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
@@ -103,7 +104,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(userData: RegisterRequest): Promise<User> {
-    const password = generateRandomCode(6);
+    const rawPassword = generateRandomCode(8); // Longer for better security
+    const hashedPassword = await bcrypt.hash(rawPassword, 10);
     let referralCode = generateRandomCode(6);
     
     // Ensure unique referral code
@@ -115,8 +117,9 @@ export class DatabaseStorage implements IStorage {
 
     const abGroup = assignABGroup();
     const initialQuestions = await this.getAppConfig("login_questions", abGroup);
+    const freeQuestions = await this.getAppConfig("free_questions", abGroup);
     
-    let questionsAvailable = 3; // Free questions
+    let questionsAvailable = freeQuestions; // Free questions from A/B config
     
     // Process referral if provided
     if (userData.referralCode) {
@@ -129,14 +132,20 @@ export class DatabaseStorage implements IStorage {
 
     const newUser = {
       email: userData.email,
-      password,
+      password: hashedPassword,
       referralCode,
       questionsAvailable: questionsAvailable + initialQuestions,
       abGroup,
     };
 
     const result = await db.insert(users).values(newUser).returning();
-    return result[0];
+    const user = result[0];
+    
+    // Return user with raw password for API response, but keep hashed in DB
+    return {
+      ...user,
+      rawPassword: rawPassword, // For API response only
+    } as User & { rawPassword: string };
   }
 
   async updateUserQuestions(userId: string, questionsToAdd: number): Promise<void> {

@@ -6,7 +6,7 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   email: text("email").notNull().unique(),
-  password: varchar("password", { length: 6 }).notNull(),
+  password: varchar("password", { length: 100 }).notNull(),
   referralCode: varchar("referral_code", { length: 6 }).notNull().unique(),
   questionsAvailable: integer("questions_available").notNull().default(3),
   questionsCompleted: integer("questions_completed").notNull().default(0),
@@ -33,7 +33,7 @@ export const marketingConfig = pgTable("marketing_config", {
 
 export const appConfig = pgTable("app_config", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  key: text("key").notNull().unique(),
+  key: text("key").notNull(),
   value: integer("value").notNull(),
   abGroup: varchar("ab_group", { length: 10 }).notNull().default("A"),
 });
@@ -96,7 +96,7 @@ export const insertAppConfigSchema = createInsertSchema(appConfig).omit({
 // Auth schemas
 export const loginSchema = z.object({
   email: z.string().email(),
-  password: z.string().length(6),
+  password: z.string().min(6).max(20), // Support 6-20 character passwords
 });
 
 export const registerSchema = z.object({

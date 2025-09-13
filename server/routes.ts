@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { evaluateAnswer } from "./services/gemini";
 import { registerSchema, loginSchema, submitAnswerSchema } from "@shared/schema";
 import { z } from "zod";
+import * as bcrypt from "bcrypt";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
@@ -17,6 +18,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = await storage.createUser(userData);
+      const userWithRawPassword = user as any;
+      
       res.json({ 
         user: { 
           id: user.id, 
@@ -24,7 +27,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           questionsAvailable: user.questionsAvailable,
           referralCode: user.referralCode 
         },
-        password: user.password
+        password: userWithRawPassword.rawPassword // Return only raw password, never hashed
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -39,7 +42,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { email, password } = loginSchema.parse(req.body);
       const user = await storage.getUserByEmail(email);
       
-      if (!user || user.password !== password) {
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (!passwordMatch) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
