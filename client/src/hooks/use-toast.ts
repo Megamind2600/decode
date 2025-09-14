@@ -7,8 +7,8 @@ import type {
 
 const ENABLE_AUTO_REMOVE = false
 
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 2000000
+const TOAST_LIMIT = 5
+const TOAST_REMOVE_DELAY = 3000000
 
 type ToasterToast = ToastProps & {
   id: string
