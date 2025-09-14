@@ -5,6 +5,8 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+const ENABLE_AUTO_REMOVE = false
+
 const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 2000000
 
@@ -56,9 +58,8 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {
-  if (toastTimeouts.has(toastId)) {
-    return
-  }
+  if (!ENABLE_AUTO_REMOVE) return
+  if (toastTimeouts.has(toastId)) return
 
   const timeout = setTimeout(() => {
     toastTimeouts.delete(toastId)
