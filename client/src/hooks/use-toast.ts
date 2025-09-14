@@ -6,7 +6,7 @@ import type {
 } from "@/components/ui/toast"
 
 
-const TOAST_LIMIT = 5
+const TOAST_LIMIT = 10
 const TOAST_REMOVE_DELAY = 3000000
 
 type ToasterToast = ToastProps & {
@@ -145,7 +145,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
-      duration: null,   
+      duration: Infinity,   
       onOpenChange: () => {},
     },
   })
