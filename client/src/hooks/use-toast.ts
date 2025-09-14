@@ -5,7 +5,7 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
-let lastToast: ToasterToast | null = null;
+export let lastToast: ToasterToast | null = null; // replace your current let lastToast
 
 const TOAST_LIMIT = 10
 const TOAST_REMOVE_DELAY = 3000000
