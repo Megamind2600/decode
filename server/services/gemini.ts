@@ -11,6 +11,8 @@ export interface QuestionEvaluation {
   structureScore: number;
   contentScore: number;
   communicationScore: number;
+  chapterc: string;
+  sectionc: string;
 }
 
 export async function evaluateAnswer(question: string, answer: string, nearest_text: string): Promise<QuestionEvaluation> {
@@ -71,6 +73,8 @@ Please evaluate this answer and provide detailed feedback.`;
       evaluation.structureScore = Math.max(1, Math.min(10, evaluation.structureScore));
       evaluation.contentScore = Math.max(1, Math.min(10, evaluation.contentScore));
       evaluation.communicationScore = Math.max(1, Math.min(10, evaluation.communicationScore));
+      evaluation.chapterc = ${chapter}
+      evaluation.sectionc = ${section}
       return evaluation;
     } else {
       throw new Error("Empty response from Gemini");
