@@ -14,6 +14,7 @@ type ToasterToast = ToastProps & {
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  persistent?: boolean
 }
 
 const actionTypes = {
@@ -95,7 +96,7 @@ export const reducer = (state: State, action: Action): State => {
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
-                open: false,
+                open: t.persistent ? true : false,
               }
             : t
         ),
