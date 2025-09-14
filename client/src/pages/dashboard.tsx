@@ -5,7 +5,6 @@ import { AIFeedback } from "@/components/ai-feedback";
 import { ReferralSection } from "@/components/referral-section";
 import { AuthModal } from "@/components/auth-modal";
 import { useAuth } from "@/hooks/use-auth";
-import { useToast, lastToast } from "@/hooks/use-toast";
 
 
 
@@ -18,18 +17,7 @@ export default function Dashboard() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showReferralSection, setShowReferralSection] = useState(false);
   const { user } = useAuth();
-  const { toast } = useToast();
 
-  React.useEffect(() => {
-   if (lastToast) {
-    toast({
-      title: lastToast.title,
-      description: lastToast.description,
-      action: lastToast.action,
-    });
-    lastToast = null; // optional, prevents repeating
-  }
- }, []);
 
   const handleStartQuestion = () => {
     if (!user) {
