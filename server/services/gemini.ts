@@ -13,14 +13,14 @@ export interface QuestionEvaluation {
   communicationScore: number;
 }
 
-export async function evaluateAnswer(question: string, answer: string): Promise<QuestionEvaluation> {
+export async function evaluateAnswer(question: string, answer: string, nearest_text: string): Promise<QuestionEvaluation> {
   try {
     const systemPrompt = `You are an expert interview coach and evaluator. 
 Analyze the candidate's answer to the interview question and provide detailed feedback.
 Rate the answer on a scale of 1-10 and provide constructive feedback.
 
 Evaluate based on:
-1. Structure (STAR method, logical flow)
+1. Structure (STAR method, CIRCLE method, AARM method, logical flow)
 2. Content (relevant examples, specific details)
 3. Communication (clarity, confidence, professionalism)
 
@@ -37,6 +37,8 @@ Respond with JSON in this exact format:
     const prompt = `Interview Question: ${question}
 
 Candidate's Answer: ${answer}
+
+Text from book decode and conquer relevant to this question: ${nearest_text}
 
 Please evaluate this answer and provide detailed feedback.`;
 

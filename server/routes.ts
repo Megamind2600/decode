@@ -107,7 +107,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Evaluate answer with Gemini
-      const evaluation = await evaluateAnswer(question.questionText, answer);
+      const evaluation = await evaluateAnswer(question.questionText, answer, question.nearest_text);
 
       // Save the answer
       const userAnswer = await storage.saveUserAnswer({

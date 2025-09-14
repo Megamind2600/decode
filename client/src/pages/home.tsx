@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { marketingApi } from "@/lib/api";
 import { Brain, Play, Info } from "lucide-react";
 
+
+
 export default function Home() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const { user } = useAuth();
@@ -42,17 +44,9 @@ export default function Home() {
                 data-testid="button-start-practice"
               >
                 <Play className="mr-2 h-5 w-5" />
-                Start Free Practice
+                Register/Login
               </Button>
-              <Button 
-                size="lg"
-                variant="secondary"
-                className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 text-lg font-semibold hover:bg-white/30"
-                data-testid="button-how-it-works"
-              >
-                <Info className="mr-2 h-5 w-5" />
-                How It Works
-              </Button>
+            
             </div>
           </div>
         </div>

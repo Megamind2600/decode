@@ -12,6 +12,7 @@ import { authApi } from "@/lib/api";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { Gift, Unlock } from "lucide-react";
+import Dashboard from "@/pages/dashboard";
 
 const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -20,7 +21,7 @@ const registerSchema = z.object({
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
-  password: z.string().length(6, "Password must be 6 characters"),
+  password: z.string().length(8, "Password must be 8 characters"),
 });
 
 interface AuthModalProps {
@@ -64,6 +65,8 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
         description: `Your password is: ${response.password}. Save it securely!`,
       });
       onClose();
+      window.location.href = "/dashboard";
+
     },
     onError: (error: any) => {
       toast({
@@ -88,6 +91,8 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
         description: "You're now logged in.",
       });
       onClose();
+      window.location.href = "/dashboard";
+
     },
     onError: (error: any) => {
       toast({
@@ -122,7 +127,7 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
         </DialogHeader>
 
         {authMode === "register" ? (
-          <Form {...registerForm}>
+          <Form key="register" {...registerForm}>
             <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
               <FormField
                 control={registerForm.control}
@@ -189,7 +194,7 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
             </form>
           </Form>
         ) : (
-          <Form {...loginForm}>
+          <Form key="login" {...loginForm}>
             <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
               <FormField
                 control={loginForm.control}
@@ -219,8 +224,8 @@ export function AuthModal({ isOpen, onClose, mode }: AuthModalProps) {
                     <FormControl>
                       <Input 
                         type="password" 
-                        placeholder="6-character password"
-                        maxLength={6}
+                        placeholder="8-character password"
+                        maxLength={8}
                         data-testid="input-password"
                         {...field} 
                       />

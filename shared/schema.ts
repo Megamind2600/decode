@@ -18,6 +18,9 @@ export const users = pgTable("users", {
 export const questions = pgTable("questions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   questionText: text("question_text").notNull(),
+  nearest_text: text("nearest_text").notNull(),
+  chapter: text("nearest_chapter").notNull(),
+  chapter: text("nearest_section").notNull(),
   category: text("category").notNull(),
   difficulty: text("difficulty").notNull(),
   tip: text("tip"),
