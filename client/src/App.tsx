@@ -30,10 +30,10 @@ function App() {
             <Navigation />
             <Router />
           </div>
-          <Toaster />
         </TooltipProvider>
       </AuthProvider>
     </QueryClientProvider>
+    <Toaster />
   );
 }
 
