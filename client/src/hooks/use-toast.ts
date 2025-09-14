@@ -5,6 +5,7 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
+let lastToast: ToasterToast | null = null;
 
 const TOAST_LIMIT = 10
 const TOAST_REMOVE_DELAY = 3000000
@@ -139,15 +140,20 @@ function toast({ ...props }: Toast) {
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 
+  const toastObj: ToasterToast = {
+    ...props,
+    id,
+    open: true,
+    duration: Infinity,   
+    onOpenChange: () => {},
+  }
+
+  // Save globally so we can re-show on the next page
+  lastToast = toastObj
+
   dispatch({
     type: "ADD_TOAST",
-    toast: {
-      ...props,
-      id,
-      open: true,
-      duration: Infinity,   
-      onOpenChange: () => {},
-    },
+    toast: toastObj,
   })
 
   return {
