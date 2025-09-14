@@ -25,8 +25,6 @@ export function AIFeedback({ evaluation, onNextQuestion, onTryAnother }: AIFeedb
     return "text-red-600";
   };
 
-  const chapterc = questions.columns.chapter;
-  const sectionc = questions.columns.section;
   
   const getScoreGradient = (score: number) => {
     const percentage = (score / 10) * 100;
@@ -79,7 +77,7 @@ export function AIFeedback({ evaluation, onNextQuestion, onTryAnother }: AIFeedb
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center">
                 <TrendingUp className="text-accent mr-2 h-5 w-5" />
-                Areas for Improvement {chapterc}
+                Areas for Improvement
               </h3>
               <Card className="bg-accent/10 border border-accent/20">
                 <CardContent className="p-4">
