@@ -5,17 +5,14 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
-export let lastToast: ToasterToast | null = null; // replace your current let lastToast
-
-const TOAST_LIMIT = 10
-const TOAST_REMOVE_DELAY = 3000000
+const TOAST_LIMIT = 1
+const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
-  persistent?: boolean
 }
 
 const actionTypes = {
@@ -59,7 +56,19 @@ interface State {
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
 const addToRemoveQueue = (toastId: string) => {
-  return
+  if (toastTimeouts.has(toastId)) {
+    return
+  }
+
+  const timeout = setTimeout(() => {
+    toastTimeouts.delete(toastId)
+    dispatch({
+      type: "REMOVE_TOAST",
+      toastId: toastId,
+    })
+  }, TOAST_REMOVE_DELAY)
+
+  toastTimeouts.set(toastId, timeout)
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -97,7 +106,7 @@ export const reducer = (state: State, action: Action): State => {
           t.id === toastId || toastId === undefined
             ? {
                 ...t,
-                open: true,
+                open: false,
               }
             : t
         ),
@@ -140,20 +149,16 @@ function toast({ ...props }: Toast) {
     })
   const dismiss = () => dispatch({ type: "DISMISS_TOAST", toastId: id })
 
-  const toastObj: ToasterToast = {
-    ...props,
-    id,
-    open: true,
-    duration: Infinity,   
-    onOpenChange: () => {},
-  }
-
-  // Save globally so we can re-show on the next page
-  lastToast = toastObj
-
   dispatch({
     type: "ADD_TOAST",
-    toast: toastObj,
+    toast: {
+      ...props,
+      id,
+      open: true,
+      onOpenChange: (open) => {
+        if (!open) dismiss()
+      },
+    },
   })
 
   return {
@@ -174,7 +179,7 @@ function useToast() {
         listeners.splice(index, 1)
       }
     }
-  }, [])
+  }, [state])
 
   return {
     ...state,
