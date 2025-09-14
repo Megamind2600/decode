@@ -145,6 +145,7 @@ function toast({ ...props }: Toast) {
       ...props,
       id,
       open: true,
+      duration: null,   
       onOpenChange: () => {},
     },
   })
