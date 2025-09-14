@@ -5,7 +5,6 @@ import type {
   ToastProps,
 } from "@/components/ui/toast"
 
-const ENABLE_AUTO_REMOVE = false
 
 const TOAST_LIMIT = 5
 const TOAST_REMOVE_DELAY = 3000000
@@ -146,7 +145,6 @@ function toast({ ...props }: Toast) {
       id,
       open: true,
       onOpenChange: (open) => {
-        if (!open) dismiss()
       },
     },
   })
