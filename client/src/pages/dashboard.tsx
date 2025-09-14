@@ -5,7 +5,7 @@ import { AIFeedback } from "@/components/ai-feedback";
 import { ReferralSection } from "@/components/referral-section";
 import { AuthModal } from "@/components/auth-modal";
 import { useAuth } from "@/hooks/use-auth";
-import { useToast } from "@/hooks/use-toast";
+import { useToast, lastToast } from "@/hooks/use-toast";
 
 
 
