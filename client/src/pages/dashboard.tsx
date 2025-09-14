@@ -5,6 +5,22 @@ import { AIFeedback } from "@/components/ai-feedback";
 import { ReferralSection } from "@/components/referral-section";
 import { AuthModal } from "@/components/auth-modal";
 import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
+
+const { toast } = useToast();
+
+React.useEffect(() => {
+  if (lastToast) {
+    toast({
+      title: lastToast.title,
+      description: lastToast.description,
+      action: lastToast.action,
+    });
+    lastToast = null; // optional, prevents repeating
+  }
+}, []);
+
+
 
 type ViewState = "dashboard" | "question" | "feedback";
 
