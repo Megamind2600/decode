@@ -13,6 +13,8 @@ interface AIFeedbackProps {
     structureScore: number;
     contentScore: number;
     communicationScore: number;
+    chapterc: string;
+    sectionc: string;
   };
   onNextQuestion: () => void;
   onTryAnother: () => void;
@@ -78,6 +80,7 @@ export function AIFeedback({ evaluation, onNextQuestion, onTryAnother }: AIFeedb
               <h3 className="text-lg font-semibold text-foreground mb-3 flex items-center">
                 <TrendingUp className="text-accent mr-2 h-5 w-5" />
                 Areas for Improvement
+                {evaluation.chapterc}
               </h3>
               <Card className="bg-accent/10 border border-accent/20">
                 <CardContent className="p-4">
