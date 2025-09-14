@@ -20,7 +20,7 @@ export const questions = pgTable("questions", {
   questionText: text("question_text").notNull(),
   nearest_text: text("nearest_text").notNull(),
   chapter: text("nearest_chapter").notNull(),
-  chapter: text("nearest_section").notNull(),
+  section: text("nearest_section").notNull(),
   category: text("category").notNull(),
   difficulty: text("difficulty").notNull(),
   tip: text("tip"),
